@@ -2,12 +2,14 @@ const express = require("express");
 const mongoose = require("mongoose");
 const dotenv = require("dotenv");
 
+const userRoutes = require("./router/userRoutes");
+
 const app = express();
 dotenv.config();
 
-app.get("/api/test", (req, res) => {
-  res.json({ message: "init" });  
-});
+app.use(express.json());
+
+app.use("/api/users", userRoutes);
 
 mongoose
   .connect(process.env.DB_URL)
