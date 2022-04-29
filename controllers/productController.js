@@ -66,34 +66,6 @@ const deleteById = async (req, res) => {
   }
 };
 
-const getStats = async (req, res) => {
-  const date = new Date();
-  date.setFullYear(date.getFullYear() - 1);
-  try {
-    let stats = await User.aggregate([
-      {
-        $match: { createdAt: { $gte: date } },
-      },
-      {
-        $project: {
-          month: {
-            $month: "$createdAt",
-          },
-        },
-      },
-      {
-        $group: {
-          _id: "$month",
-          total: { $sum: 1 },
-        },
-      },
-    ]);
-    return res.status(200).json(stats);
-  } catch (error) {
-    return res.status(500).json(error.message);
-  }
-};
-
 module.exports.ProductController = {
   insertMany,
   insertOne,
@@ -101,5 +73,4 @@ module.exports.ProductController = {
   getById,
   updateById,
   deleteById,
-  getStats,
 };
