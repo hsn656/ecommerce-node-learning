@@ -1,25 +1,30 @@
 const express = require("express");
-const User = require("../models/user");
-const cryptoJS = require("crypto-js");
-const jwt = require("jsonwebtoken");
 const { verifyAdminOrOwner } = require("../middlewares/verifyAdminOrOwner");
 const { verifyToken } = require("../middlewares/verifyToken");
-const { findByIdAndUpdate } = require("../models/user");
 const { UserController } = require("../controllers/userController");
+const { verifyAdmin } = require("../middlewares/verifyAdmin");
 
 const router = express.Router();
 
-router.put("/:id", verifyToken, verifyAdminOrOwner, UserController.updateById);
+router.put(
+  "/:userId",
+  verifyToken,
+  verifyAdminOrOwner,
+  UserController.updateById
+);
 
 router.delete(
-  "/:id",
+  "/:userId",
   verifyToken,
   verifyAdminOrOwner,
   UserController.deleteById
 );
 
+// stats to get monthly registered users in last Year
+router.get("/stats", verifyToken, verifyAdmin, UserController.getStats);
+
 router.get("/", UserController.getAll);
 
-router.get("/:id", UserController.getById);
+router.get("/:userId", UserController.getById);
 
 module.exports = router;
